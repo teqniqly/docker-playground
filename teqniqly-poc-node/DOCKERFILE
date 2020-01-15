@@ -1,1 +1,5 @@
-FROM node:latest
+FROM node:dubnium-alpine3.9
+CMD [ "node", "app.js" ]
+ENV PORT=9999
+WORKDIR /app
+COPY app.js .
