@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "projects": {
+    "docker-angular": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/docker-angular",
+      "sourceRoot": "apps/docker-angular/src",
+      "prefix": "tq",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/docker-angular",
+            "index": "apps/docker-angular/src/index.html",
+            "main": "apps/docker-angular/src/main.ts",
+            "polyfills": "apps/docker-angular/src/polyfills.ts",
+            "tsConfig": "apps/docker-angular/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "apps/docker-angular/src/favicon.ico",
+              "apps/docker-angular/src/assets"
+            ],
+            "styles": ["apps/docker-angular/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/docker-angular/src/environments/environment.ts",
+                  "with": "apps/docker-angular/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "docker-angular:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "docker-angular:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "docker-angular:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/docker-angular/tsconfig.app.json",
+              "apps/docker-angular/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/docker-angular/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/docker-angular/jest.config.js",
+            "tsConfig": "apps/docker-angular/tsconfig.spec.json",
+            "setupFile": "apps/docker-angular/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "docker-angular-e2e": {
+      "root": "apps/docker-angular-e2e",
+      "sourceRoot": "apps/docker-angular-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/docker-angular-e2e/cypress.json",
+            "tsConfig": "apps/docker-angular-e2e/tsconfig.e2e.json",
+            "devServerTarget": "docker-angular:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "docker-angular:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/docker-angular-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/docker-angular-e2e/**"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "docker-angular"
+}
